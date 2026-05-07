@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paradise Found Farm — Development Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:     #1A6B9E;
+  --teal-dk:  #0D4A72;
+  --teal-lt:  #2D8EC5;
+  --navy:     #0C2233;
+  --ink:      #111820;
+  --sage:     #5C7A5A;
+  --moss:     #3D5C3A;
+  --earth:    #6B7C5E;
+  --stone:    #8A9080;
+  --cream:    #F6F4EF;
+  --parch:    #EDE9E0;
+  --mist:     #D8E4DC;
+  --rule:     rgba(26,107,158,0.15);
+  --white:    #FFFFFF;
+  --mid:      #4A5A66;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--pf-header-bg, linear-gradient(180deg, #3D5C3A 0%, #2A4A52 100%));
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+.brand-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255,255,255,0.2);
+}
+.brand-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+}
+.brand-label strong {
+  display: block;
+  color: rgba(255,255,255,0.95);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.header-nav {
+  display: flex;
+  gap: 4px;
+}
+.nav-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  transition: all 0.2s;
+  font-family: 'Nunito', sans-serif;
+}
+.nav-pill:hover { color: white; background: rgba(255,255,255,0.08); }
+.nav-pill.active { background: var(--teal); color: white; }
+.nav-pill--link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(92,122,90,0.35);
+  color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.nav-pill--link:hover { background: rgba(92,122,90,0.55); color: white; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--pf-hero-bg, linear-gradient(180deg, #5C7A5A 0%, #3D5C3A 28%, #2A6B7E 65%, #0D4A72 100%));
+  padding: 64px 32px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 80% 10%, rgba(92,122,90,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 95%, rgba(26,107,158,0.35) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.hero-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--teal-lt);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-tag::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--teal-lt);
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  color: white;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.hero-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.75);
+}
+.hero-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 32px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.meta-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.04em;
+}
+.meta-chip .icon { font-size: 14px; }
+
+/* ── GUIDING PRINCIPLES ── */
+.principles-section {
+  background: var(--cream);
+  padding: 72px 32px 56px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.principles-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 1px;
+  background: var(--teal);
+  opacity: 0.4;
+}
+.principles-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.principles-header {
+  text-align: center;
+  margin-bottom: 48px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.principles-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 14px;
+}
+.principles-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+.principles-lede {
+  font-size: 15px;
+  color: var(--mid);
+  line-height: 1.65;
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+}
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.principle-card {
+  background: white;
+  padding: 32px 32px 36px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s;
+}
+.principle-card:hover { background: #FBFAF6; }
+.principle-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--teal);
+  letter-spacing: 0.15em;
+  margin-bottom: 14px;
+}
+.principle-rule {
+  width: 32px;
+  height: 2px;
+  background: var(--teal);
+  margin-bottom: 18px;
+  opacity: 0.7;
+}
+.principle-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: -0.005em;
+}
+.principle-card-body {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+.principle-card-body strong {
+  color: var(--teal-dk);
+  font-weight: 600;
+}
+.principles-footer {
+  margin-top: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.principles-footer-bar {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--rule));
+}
+.principles-footer-text {
+  font-size: 13px;
+  color: var(--stone);
+  max-width: 520px;
+  line-height: 1.65;
+  font-style: italic;
+}
+.principles-footer-text em {
+  color: var(--teal-dk);
+  font-style: italic;
+  font-weight: 500;
+}
+@media (max-width: 680px) {
+  .principles-section { padding: 48px 20px 40px; }
+  .principles-grid { grid-template-columns: 1fr; }
+  .principle-card { padding: 24px 22px 26px; }
+}
+
+/* ── PHASE TIMELINE STRIP ── */
+.timeline-strip {
+  background: var(--parch);
+  border-bottom: 1px solid var(--rule);
+  padding: 0 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.timeline-strip::-webkit-scrollbar { display: none; }
+.timeline-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+}
+.phase-tab {
+  flex: 1;
+  min-width: 140px;
+  padding: 18px 20px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  text-align: left;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  position: relative;
+  font-family: 'Nunito', sans-serif;
+}
+.phase-tab:hover { background: rgba(26,107,158,0.05); }
+.phase-tab.active {
+  background: rgba(26,107,158,0.06);
+  border-bottom-color: var(--teal);
+}
+.phase-tab--link {
+  text-decoration: none;
+  display: block;
+  background: rgba(194,112,58,0.06);
+  border-left: 1px solid var(--rule);
+}
+.phase-tab--link:hover { background: rgba(194,112,58,0.12); }
+.phase-tab--link .phase-tab-num { color: #c2703a; }
+.phase-tab--link .phase-tab-label { color: #9a5328; }
+.phase-tab-num {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 3px;
+}
+.phase-tab.active .phase-tab-num { color: var(--teal); }
+.phase-tab-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.phase-tab-range {
+  font-size: 11px;
+  color: var(--stone);
+  margin-top: 3px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.phase-tab-dot {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 30px;
+  background: var(--rule);
+}
+.phase-tab:last-child .phase-tab-dot { display: none; }
+
+/* ── MAIN CONTENT ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 40px 32px 80px; }
+
+/* ── PHASE PANELS ── */
+.phase-panel { display: none; }
+.phase-panel.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── PHASE HEADER ── */
+.phase-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.phase-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.phase-header-text .phase-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+}
+.phase-header-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.phase-header-text p {
+  font-size: 14px;
+  color: var(--mid);
+  max-width: 600px;
+  line-height: 1.65;
+}
+.phase-badge {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── SECTION CARDS ── */
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.section-grid.wide { grid-template-columns: 1fr; }
+.section-grid.two { grid-template-columns: 1fr 1fr; }
+
+.card {
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(26,107,158,0.08); }
+.card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.card-header-icon { font-size: 18px; flex-shrink: 0; }
+.card-header-text {
+  flex: 1;
+  min-width: 0;
+}
+.card-header-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 2px;
+}
+.card-header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.card-toggle {
+  font-size: 12px;
+  color: var(--stone);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+.card.open .card-toggle { transform: rotate(180deg); }
+.card-body {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.2s;
+}
+.card.open .card-body {
+  max-height: 1200px;
+  padding: 16px 20px 20px;
+}
+
+/* ── ITEM LISTS ── */
+.item-list { list-style: none; }
+.item-list li {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(216,228,220,0.5);
+  font-size: 13.5px;
+  color: var(--mid);
+  line-height: 1.5;
+}
+.item-list li:last-child { border-bottom: none; }
+.item-list li::before {
+  content: '—';
+  color: var(--teal);
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.item-list.bullets li::before { content: '•'; font-size: 16px; }
+.item-list.checks li::before { content: '✓'; color: var(--sage); }
+
+/* ── ACCENT COLORS PER PHASE ── */
+.phase-1 .card-header { border-left: 3px solid var(--teal); }
+.phase-2 .card-header { border-left: 3px solid var(--sage); }
+.phase-3 .card-header { border-left: 3px solid var(--moss); }
+.phase-4 .card-header { border-left: 3px solid var(--teal-dk); }
+
+.phase-1 .phase-icon-wrap { background: rgba(26,107,158,0.1); }
+.phase-2 .phase-icon-wrap { background: rgba(92,122,90,0.12); }
+.phase-3 .phase-icon-wrap { background: rgba(61,92,58,0.12); }
+.phase-4 .phase-icon-wrap { background: rgba(13,66,114,0.12); }
+
+.phase-1 .phase-badge { background: rgba(26,107,158,0.1); color: var(--teal); }
+.phase-2 .phase-badge { background: rgba(92,122,90,0.12); color: var(--sage); }
+.phase-3 .phase-badge { background: rgba(61,92,58,0.12); color: var(--moss); }
+.phase-4 .phase-badge { background: rgba(13,66,114,0.12); color: var(--teal-dk); }
+
+/* ── CALLOUT BOX ── */
+.callout {
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.callout-teal {
+  background: rgba(26,107,158,0.07);
+  border-left: 3px solid var(--teal);
+  color: var(--teal-dk);
+}
+.callout-sage {
+  background: rgba(92,122,90,0.08);
+  border-left: 3px solid var(--sage);
+  color: var(--moss);
+}
+.callout-earth {
+  background: rgba(107,124,94,0.08);
+  border-left: 3px solid var(--earth);
+  color: #3A4A36;
+}
+.callout strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+/* ── LOOP GRID ── */
+.loop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+.loop-card {
+  background: var(--parch);
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+}
+.loop-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.loop-body {
+  font-size: 12px;
+  color: var(--mid);
+  line-height: 1.5;
+}
+.loop-arrow {
+  font-size: 11px;
+  color: var(--stone);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── OUTPUTS BAND ── */
+.outputs-band {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.output-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.output-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal-lt);
+}
+.output-val {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.4;
+}
+
+/* ── ANIMAL ADDITIONS CARDS ── */
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.animal-card {
+  background: var(--parch);
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--rule);
+  text-align: center;
+}
+.animal-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.animal-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.animal-desc { font-size: 11.5px; color: var(--mid); line-height: 1.45; }
+
+/* ── PRINCIPLE STATEMENT ── */
+.principle {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--teal-dk) 100%);
+  border-radius: 14px;
+  padding: 36px 40px;
+  text-align: center;
+  margin-top: 32px;
+}
+.principle-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: white;
+  line-height: 1.55;
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+.principle-attr {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  padding: 24px 32px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.footer-logo {
+  height: 32px;
+  display: block;
+  opacity: 0.55;
+}
+.footer-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 680px) {
+  .hero { padding: 40px 20px; }
+  .main { padding: 24px 20px 60px; }
+  .header-inner { padding: 12px 20px; }
+  .header-nav { display: none; }
+  .section-grid.two { grid-template-columns: 1fr; }
+  .loop-grid { grid-template-columns: 1fr; }
+  .phase-header { flex-direction: column; gap: 16px; }
+  .phase-badge { margin-left: 0; }
+  .timeline-strip { padding: 0 16px; }
+  .outputs-band { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <img src="assets/hostcreate-logo.png" alt="HostCreate" class="brand-logo">
+      <div class="brand-divider"></div>
+      <div class="brand-label">
+        <strong>Paradise Found Farm</strong>
+        Contribution + Development Plan
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-pill active" onclick="showPhase(1, this)">Phase 1</button>
+      <button class="nav-pill" onclick="showPhase(2, this)">Phase 2</button>
+      <button class="nav-pill" onclick="showPhase(3, this)">Phase 3</button>
+      <button class="nav-pill" onclick="showPhase(4, this)">Long Term</button>
+      <a class="nav-pill nav-pill--link" href="experience.html">Experience Loop →</a>
+      <a class="nav-pill nav-pill--link" href="urban-drop.html">Urban Drop →</a>
+      <a class="nav-pill nav-pill--link" href="tracker.html">Tracker →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Prepared by Lindsay Stoll · HostCreate</div>
+    <h1 class="hero-title">A Plan for <em>Paradise</em></h1>
+    <p class="hero-subtitle">A work-exchange contribution plan — supporting, not restructuring, the farm Warren has already built</p>
+    <div class="hero-meta">
+      <div class="meta-chip"><span class="icon">📍</span> Sierra Vista / Bisbee, AZ</div>
+      <div class="meta-chip"><span class="icon">📅</span> Arrival: May 23rd</div>
+      <div class="meta-chip"><span class="icon">🌧️</span> Monsoon: Late June onset</div>
+      <div class="meta-chip"><span class="icon">🌿</span> Observation before intervention</div>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDING PRINCIPLES -->
+<section class="principles-section">
+  <div class="principles-inner">
+    <div class="principles-header">
+      <div class="principles-eyebrow">My Approach</div>
+      <h2 class="principles-title">Four Guiding Principles</h2>
+      <p class="principles-lede">This is your farm. My role is to add value within the systems you've built — quietly, carefully, and only after I understand how they work.</p>
+    </div>
+
+    <div class="principles-grid">
+      <article class="principle-card">
+        <div class="principle-num">01</div>
+        <div class="principle-rule"></div>
+        <h3 class="principle-card-title">Support, Don't Restructure</h3>
+        <p class="principle-card-body">Improve and extend existing farm operations rather than replacing or reorganizing them. The systems already in place have been earned through years of work — my job is to make them stronger, not different.</p>
+      </article>
+
+      <article class="principle-card">
+        <div class="principle-num">02</div>
+        <div class="principle-rule"></div>
+        <h3 class="principle-card-title">Focus the Work</h3>
+        <p class="principle-card-body">Concentrate effort on four high-leverage areas: <strong>soil health</strong>, <strong>water retention</strong>, <strong>animal systems</strong>, and <strong>nursery fertility</strong>. Everything else is secondary until these are stable and improving.</p>
+      </article>
+
+      <article class="principle-card">
+        <div class="principle-num">03</div>
+        <div class="principle-rule"></div>
+        <h3 class="principle-card-title">Small, High-Impact Improvements</h3>
+        <p class="principle-card-body">Enhance the visitor experience through low-cost, high-yield changes — clearer flow, better signage, small habitat touches — before considering anything that requires capital or rebuilding.</p>
+      </article>
+
+      <article class="principle-card">
+        <div class="principle-num">04</div>
+        <div class="principle-rule"></div>
+        <h3 class="principle-card-title">Learn Before Proposing</h3>
+        <p class="principle-card-body">Spend the first weeks reading the land, the systems, and the workflow. No large-scale proposals until I've watched a full monsoon cycle and understood why things are done the way they are.</p>
+      </article>
+    </div>
+
+    <div class="principles-footer">
+      <div class="principles-footer-bar"></div>
+      <p class="principles-footer-text">The phase plan below is a <em>map of intent</em>, not a contract. Every proposed action is contingent on what the first month of observation reveals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE TABS -->
+<div class="timeline-strip">
+  <div class="timeline-inner">
+    <button class="phase-tab active" onclick="showPhase(1, this)" id="tab-1">
+      <div class="phase-tab-num">Phase 1</div>
+      <div class="phase-tab-label">Observe + Stabilize</div>
+      <div class="phase-tab-range">Days 0–30</div>
+      <div class="phase-tab-dot"></div>
+    </button>
+    <button class="phase-tab" onclick="showPhase(2, this)" id="tab-2">
+      <div class="phase-tab-num">Phase 2</div>
+      <div class="phase-tab-label">Light Earthworks</div>
+      <div class="phase-tab-range">Days 30–90</div>
+      <div class="phase-tab-dot"></div>
+    </button>
+    <button class="phase-tab" onclick="showPhase(3, this)" id="tab-3">
+      <div class="phase-tab-num">Phase 3</div>
+      <div class="phase-tab-label">Integration + Scale</div>
+      <div class="phase-tab-range">Days 90–120</div>
+      <div class="phase-tab-dot"></div>
+    </button>
+    <button class="phase-tab" onclick="showPhase(4, this)" id="tab-4">
+      <div class="phase-tab-num">Long Term</div>
+      <div class="phase-tab-label">Closed-Loop Farm</div>
+      <div class="phase-tab-range">Month 4+</div>
+      <div class="phase-tab-dot"></div>
+    </button>
+    <a class="phase-tab phase-tab--link" href="urban-drop.html">
+      <div class="phase-tab-num">Strategy</div>
+      <div class="phase-tab-label">Urban Drop →</div>
+      <div class="phase-tab-range">Tucson · Sierra Vista · Bisbee</div>
+    </a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase-panel phase-1 active" id="panel-1">
+    <div class="phase-header">
+      <div class="phase-icon-wrap">🔭</div>
+      <div class="phase-header-text">
+        <div class="phase-eyebrow">Phase 1 · Days 0–30</div>
+        <h2>Observe Before Intervening</h2>
+        <p>The most important thing I can do in the first month is watch and listen — to the land, the animals, the water, and the visitors. Every observation before the monsoon hits is data I cannot get after the fact.</p>
+      </div>
+      <div class="phase-badge">Days 0–30</div>
+    </div>
+
+    <div class="callout callout-teal" style="margin-bottom:24px">
+      <strong>Critical Timing Note</strong>
+      Arrival is late May. Monsoon onset is late June. This gives a narrow window to map hydrology before the first rains arrive. Month 1 is about reading the land in its dry-season state — before disrupting anything. No major earthworks until rainfall confirms the flow paths.
+    </div>
+
+    <div class="section-grid">
+      <div class="card open" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">💧</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Water Systems</div>
+            <div class="card-header-title">Hydrology Mapping</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Map water movement patterns after the first rains arrive</li>
+            <li>Identify erosion zones and dry runoff channels across the property</li>
+            <li>Locate natural low points that indicate future pond sites</li>
+            <li>Observe where existing plantings (mulberry, fig, blackberry) collect vs. shed water</li>
+            <li>Document topography sketches for swale placement planning</li>
+          </ul>
+          <div class="callout callout-sage" style="margin-top:12px">
+            <strong>Why this first</strong>
+            Flat windy desert is deceptive. Without watching one rain event, you cannot know where the water wants to go. Build swales on the wrong contour and you've done expensive harm.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🌱</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Soil Systems</div>
+            <div class="card-header-title">Baseline Assessment</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Informal soil sampling across 4–5 zones — texture, color, compaction, biology</li>
+            <li>Audit existing goat manure handling and curing process</li>
+            <li>Assess what compost infrastructure is already present or improvised</li>
+            <li>Identify the fastest wins: where can goat manure go directly, and where does it need processing?</li>
+            <li>Observe plant stress signals in the nursery as indicators of soil health</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🐐</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Animal Systems</div>
+            <div class="card-header-title">Welfare + Flow Audit</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Observe animal stress points in the current barn-based petting zoo setup</li>
+            <li>Map traffic patterns: where do visitors cluster, where do they avoid, where do they linger?</li>
+            <li>Note shade availability, water access, and animal separation options</li>
+            <li>Assess emu containment in context of expanded visitor access</li>
+            <li>Identify low-cost enrichment opportunities for existing animals</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">👤</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Visitor Experience</div>
+            <div class="card-header-title">Friction Point Mapping</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Walk the guest experience as a visitor — note what feels incomplete or confusing</li>
+            <li>Identify missing signage, unclear pathways, and photo opportunity gaps</li>
+            <li>Assess the entry sequence: arrival → parking → first impression → petting zoo</li>
+            <li>Note where guests slow down vs. move through quickly</li>
+            <li>Review HipCamp and Airbnb listings against the actual on-ground experience</li>
+          </ul>
+          <div class="callout callout-teal" style="margin-top:12px">
+            <strong>Quick Win Opportunity</strong>
+            $20 entry is underpriced for the experience described. Before building the dedicated enclosure, small flow improvements and a clear feeding station structure could justify a $30–35 price point immediately.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="outputs-band">
+      <div class="output-item">
+        <div class="output-label">Deliverable 1</div>
+        <div class="output-val">Full systems map of farm as-is</div>
+      </div>
+      <div class="output-item">
+        <div class="output-label">Deliverable 2</div>
+        <div class="output-val">Hydrology + erosion risk sketch</div>
+      </div>
+      <div class="output-item">
+        <div class="output-label">Deliverable 3</div>
+        <div class="output-val">Animal welfare + visitor flow report</div>
+      </div>
+      <div class="output-item">
+        <div class="output-label">Deliverable 4</div>
+        <div class="output-val">Compost/manure baseline assessment</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase-panel phase-2" id="panel-2">
+    <div class="phase-header">
+      <div class="phase-icon-wrap">🌿</div>
+      <div class="phase-header-text">
+        <div class="phase-eyebrow">Phase 2 · Days 30–90</div>
+        <h2>Light Earthworks + System Seeding</h2>
+        <p>With one monsoon observation cycle complete, we begin shaping the land. Light earthworks aligned with observed water flow. Soil biology introduced. Candidate animals for expansion brought in for experience value and system function.</p>
+      </div>
+      <div class="phase-badge">Days 30–90</div>
+    </div>
+
+    <div class="section-grid">
+      <div class="card open" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">⛏️</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Earthworks</div>
+            <div class="card-header-title">Water Harvesting Begins</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Contour swales — only after rainfall observation confirms actual flow paths</li>
+            <li>Half-moon infiltration basins around existing orchard zones (fig, mulberry, pomegranate)</li>
+            <li>Berm reinforcement near nursery water zones to reduce runoff loss</li>
+            <li>Passive water redirection toward identified future pond site</li>
+          </ul>
+          <div class="callout callout-sage" style="margin-top:12px">
+            <strong>Design Principle</strong>
+            The rock circles Warren already built around his orchard trees are intuitive water harvesting. This phase extends that logic across the property systematically.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🧪</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Soil Biology</div>
+            <div class="card-header-title">Fertility System Introduction</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>Indigenous Microorganism (IMO) culture from on-site forest floor — native biology only</li>
+            <li>Comfrey planted as Fermented Plant Juice (FPJ) source — growth hormones and enzymes</li>
+            <li>Goat manure stream segmented: direct application vs. hot compost vs. fungal habitat</li>
+            <li>Wood chip fungal habitat zones laid in orchard and nursery areas</li>
+            <li>Three-bin compost system established with labeled streams</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card open" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🌊</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Water System</div>
+            <div class="card-header-title">Pond Site Preparation</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>First pond excavation — primary capture, habitat, and future duck system</li>
+            <li>Pond-integrated ecology design: spillways that direct overflow to orchard zones</li>
+            <li>Biochar staging in pond edge zones for nutrient activation</li>
+            <li>Compost tea brewing using pond water — closed-loop inoculation</li>
+          </ul>
+          <div class="callout callout-teal" style="margin-top:12px">
+            <strong>For the Ducks</strong>
+            Ducks need a water feature that doesn't evaporate in a week or go stagnant. A properly sited earthen pond with spillways solves this — and adds habitat, water storage, and Year 2 chinampa potential simultaneously.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🐾</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Animal Expansion</div>
+            <div class="card-header-title">Recommended Additions</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--mid);margin-bottom:12px">Each addition is selected for heat tolerance, low maintenance, agritourism value, and ecological system function:</p>
+          <div class="animal-grid">
+            <div class="animal-card">
+              <span class="animal-icon">🐢</span>
+              <div class="animal-name">Tortoise Sanctuary</div>
+              <div class="animal-desc">Educational draw. Ethical desert native. Long-term anchor for ecology programming.</div>
+            </div>
+            <div class="animal-card">
+              <span class="animal-icon">🦆</span>
+              <div class="animal-name">Ducks</div>
+              <div class="animal-desc">Pond ecosystem seed. Insect control. Manure value. Guest favorite once pond exists.</div>
+            </div>
+            <div class="animal-card">
+              <span class="animal-icon">🫏</span>
+              <div class="animal-name">Mini Donkeys</div>
+              <div class="animal-desc">High visitor appeal. Load support. Distinctive agritourism personality animal.</div>
+            </div>
+            <div class="animal-card">
+              <span class="animal-icon">🦚</span>
+              <div class="animal-name">Peacocks</div>
+              <div class="animal-desc">Visual brand statement. Aesthetic corridor. Strong social media draw.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0" onclick="toggleCard(this)">
+      <div class="card-header">
+        <span class="card-header-icon">♻️</span>
+        <div class="card-header-text">
+          <div class="card-header-label">Value Chain</div>
+          <div class="card-header-title">Compost + Manure Product Line</div>
+        </div>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--mid);margin-bottom:14px">The farm's waste streams become branded soil products — an internal revenue expansion with minimal new input cost.</p>
+        <div class="section-grid two" style="margin-bottom:12px">
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">Input Streams</div>
+            <ul class="item-list bullets">
+              <li>Goat manure — existing high-volume base</li>
+              <li>Chicken manure — high nitrogen amendment</li>
+              <li>Emu manure — dry bulk structure</li>
+              <li>Rabbit manure — direct-use nursery grade</li>
+              <li>Duck manure — once pond system is active</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">Branded Outputs</div>
+            <ul class="item-list checks">
+              <li><strong>Desert Regeneration Blend</strong> — primary compost product</li>
+              <li><strong>Nursery Inoculate</strong> — high-nutrient fast-turnover mix</li>
+              <li><strong>Orchard Restore</strong> — fungal-dominant slow-release</li>
+              <li><strong>Pond-Aged Biochar</strong> — premium amendment tier</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase-panel phase-3" id="panel-3">
+    <div class="phase-header">
+      <div class="phase-icon-wrap">🌳</div>
+      <div class="phase-header-text">
+        <div class="phase-eyebrow">Phase 3 · Days 90–120</div>
+        <h2>Integration + Experience Scaling</h2>
+        <p>The regenerative systems built in Phase 2 are now visible and functioning. Phase 3 turns them into the guest experience — making the ecological work legible, beautiful, and worth paying for.</p>
+      </div>
+      <div class="phase-badge">Days 90–120</div>
+    </div>
+
+    <div class="section-grid">
+      <div class="card open" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🗺️</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Guest Experience</div>
+            <div class="card-header-title">Desert Ecology Loop</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size:13px;color:var(--mid);margin-bottom:10px">A self-guided or hosted walking experience that shows visitors how the farm works as a living system:</p>
+          <ul class="item-list">
+            <li><strong>Animals</strong> — the heart of the experience, now in dedicated habitat zones</li>
+            <li><strong>Compost Station</strong> — visible, labeled, and explainable to curious guests</li>
+            <li><strong>Nursery + Orchard</strong> — fruit trees with visible half-moon water basins and plant ID signs</li>
+            <li><strong>Pond System</strong> — ducks, ecology, water story; the visual anchor of the loop</li>
+          </ul>
+          <div class="callout callout-earth" style="margin-top:12px">
+            <strong>The Shift</strong>
+            Visitors don't just see animals. They see how the land sustains itself. That story is worth $10–15 more per ticket and dramatically increases repeat visits and word-of-mouth referrals.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🏡</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Petting Zoo Redesign</div>
+            <div class="card-header-title">Barn → Habitat Zones</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li><strong>Tortoise habitat zone</strong> — slow ecology / education anchor</li>
+            <li><strong>Duck pond system</strong> — water ecology, feeding interaction</li>
+            <li><strong>Mini donkey loop</strong> — load-bearing personality animals, walkalong experience</li>
+            <li><strong>Peacock corridor</strong> — aesthetic attraction layer, photography zone</li>
+            <li><strong>Goat + emu core area</strong> — existing anchor system, enhanced flow and shade</li>
+          </ul>
+          <div class="callout callout-sage" style="margin-top:12px">
+            <strong>Pricing Implication</strong>
+            A dedicated enclosure with clear entry, feeding station, and habitat zones supports $30–35/entry. Add a premium "farm ecology tour" at $55–65/person for groups. The emus alone sell the experience.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0" onclick="toggleCard(this)">
+      <div class="card-header">
+        <span class="card-header-icon">🌱</span>
+        <div class="card-header-text">
+          <div class="card-header-label">Nursery Integration</div>
+          <div class="card-header-title">Existing Plantings — New Roles</div>
+        </div>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="section-grid two">
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">Existing Plants</div>
+            <ul class="item-list">
+              <li><strong>Mulberry</strong> — shade + fodder + visitor canopy system</li>
+              <li><strong>Fig</strong> — high-value edible landscape anchor</li>
+              <li><strong>Pomegranate</strong> — desert resilience crop + visual appeal</li>
+              <li><strong>Blackberry</strong> — microclimate demonstration zone</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:8px">New Function</div>
+            <ul class="item-list">
+              <li>Nursery becomes the <strong>soil quality feedback loop</strong></li>
+              <li>Compost quality validated through plant stress signals</li>
+              <li>New species added for geographic appropriateness + visitor education</li>
+              <li>U-pick edible landscape integrated into the ecology loop tour</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHASE 4 / LONG TERM ══ -->
+  <div class="phase-panel phase-4" id="panel-4">
+    <div class="phase-header">
+      <div class="phase-icon-wrap">🔄</div>
+      <div class="phase-header-text">
+        <div class="phase-eyebrow">Long Term · Month 4+</div>
+        <h2>The Closed-Loop Farm</h2>
+        <p>The goal beyond 120 days: a farm where every system feeds every other system, waste is invisible, and visitors can see the land sustaining itself. This is not complexity — it is visible ecological function that increases authenticity and revenue simultaneously.</p>
+      </div>
+      <div class="phase-badge">Month 4+</div>
+    </div>
+
+    <div class="card open" onclick="toggleCard(this)" style="margin-bottom:16px">
+      <div class="card-header">
+        <span class="card-header-icon">♾️</span>
+        <div class="card-header-text">
+          <div class="card-header-label">System Design</div>
+          <div class="card-header-title">Four Interconnected Loops</div>
+        </div>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="loop-grid">
+          <div class="loop-card">
+            <div class="loop-title">🐐 Animal Loop</div>
+            <div class="loop-body">
+              <span class="loop-arrow">Feed → Manure → Soil → Feed</span><br>
+              Every animal on the property contributes to fertility. No waste stream leaves the land.
+            </div>
+          </div>
+          <div class="loop-card">
+            <div class="loop-title">🌱 Compost Loop</div>
+            <div class="loop-body">
+              <span class="loop-arrow">Waste → Inoculation → Nursery → Sale</span><br>
+              Branded soil products created from what was previously being managed away.
+            </div>
+          </div>
+          <div class="loop-card">
+            <div class="loop-title">💧 Water Loop</div>
+            <div class="loop-body">
+              <span class="loop-arrow">Rain → Swales → Pond → Irrigation → Soil</span><br>
+              Monsoon water captured and held on the land rather than lost to sheet flow.
+            </div>
+          </div>
+          <div class="loop-card">
+            <div class="loop-title">👥 Visitor Loop</div>
+            <div class="loop-body">
+              <span class="loop-arrow">Experience → Revenue → Reinvestment</span><br>
+              Agritourism revenue funds system improvement. Improved systems attract more guests.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">🎪</span>
+          <div class="card-header-text">
+            <div class="card-header-label">GeoDome Integration</div>
+            <div class="card-header-title">Events + Greenhouse</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li>50' dome sited using monsoon water flow data from Phase 1 observation</li>
+            <li>Storage container windbreak positioned after understanding prevailing wind patterns</li>
+            <li>Greenhouse function tied into nursery and compost feedback loop</li>
+            <li>Events space positioned as premium agritourism experience tier</li>
+            <li>Sculpture garden integrated with ecology loop walking path</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-header-icon">📋</span>
+          <div class="card-header-text">
+            <div class="card-header-label">Grant Opportunities</div>
+            <div class="card-header-title">USDA + State Programs</div>
+          </div>
+          <span class="card-toggle">▾</span>
+        </div>
+        <div class="card-body">
+          <ul class="item-list">
+            <li><strong>EQIP</strong> — 50% cost-share on water harvesting earthworks. Must file before any earthwork begins.</li>
+            <li><strong>REAP</strong> — 25% grant on solar installation. File before ordering panels.</li>
+            <li><strong>AZ Specialty Crop Block Grant</strong> — Nursery qualifies. Geographically appropriate plants and specialty fruit.</li>
+            <li><strong>VAPG Planning</strong> — Up to $75,000 for value-added product development (soil products, specialty crops).</li>
+            <li><strong>SARE</strong> — On-farm research grant for documenting the polyculture system.</li>
+          </ul>
+          <div class="callout callout-teal" style="margin-top:12px">
+            <strong>I Write These</strong>
+            Grant writing is part of my background. Happy to research and write applications for any of these programs — the EQIP application in particular should happen before Phase 2 earthworks begin.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="principle-quote">"Visitors don't just see animals. They see how the land sustains itself. That's not adding complexity — it's increasing the perceived authenticity of the farm through visible ecological function."</div>
+      <div class="principle-attr">Lindsay Stoll · HostCreate · Paradise Found Farm Development Plan · May 2026</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="assets/hostcreate-logo.png" alt="HostCreate" class="footer-logo">
+    </div>
+    <div class="footer-text">Prepared for Warren · Paradise Found Farm · Sierra Vista, AZ · May 2026</div>
+    <div class="footer-text" style="font-size:11px">Lindsay Stoll · lrstoll87@medium.com</div>
+  </div>
+</footer>
+
+<script>
+function showPhase(num, triggerEl) {
+  // Hide all panels
+  document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+  // Show target
+  document.getElementById('panel-' + num).classList.add('active');
+
+  // Update nav pills
+  document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+  // Update timeline tabs
+  document.querySelectorAll('.phase-tab').forEach(b => b.classList.remove('active'));
+
+  if (triggerEl) {
+    triggerEl.classList.add('active');
+    // Sync the other set of buttons
+    const tabEl = document.getElementById('tab-' + num);
+    if (tabEl) tabEl.classList.add('active');
+    if (triggerEl.classList.contains('phase-tab')) {
+      // Trigger was a tab — update nav pills
+      const pills = document.querySelectorAll('.nav-pill');
+      if (pills[num-1]) pills[num-1].classList.add('active');
+    }
+  }
+}
+
+function toggleCard(card) {
+  card.classList.toggle('open');
+}
+
+// Open first card in each panel by default — already done via HTML class
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  const active = document.querySelector('.phase-tab.active');
+  if (!active) return;
+  const tabs = Array.from(document.querySelectorAll('.phase-tab'));
+  const idx = tabs.indexOf(active);
+  if (e.key === 'ArrowRight' && idx < tabs.length - 1) {
+    showPhase(idx + 2, tabs[idx + 1]);
+  } else if (e.key === 'ArrowLeft' && idx > 0) {
+    showPhase(idx, tabs[idx - 1]);
+  }
+});
+</script>
+
+<!-- ─── TWEAKS PANEL ─────────────────────────────────────────────── -->
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "preset": "Sage to Deep Blue",
+  "heroTop": "#5C7A5A",
+  "heroMid": "#4A7A5C",
+  "heroDeep": "#1F4A5C",
+  "heroBottom": "#0C2233",
+  "headerTop": "#5C7A5A",
+  "headerBottom": "#2A4A52",
+  "headerDark": false
+}/*EDITMODE-END*/;
+
+const PRESETS = {
+  "Sage to Deep Blue": {
+    heroTop: "#5C7A5A", heroMid: "#3D5C3A", heroDeep: "#2A6B7E", heroBottom: "#0D4A72",
+    headerTop: "#3D5C3A", headerBottom: "#2A4A52"
+  },
+  "Forest to Navy": {
+    heroTop: "#6B8A5A", heroMid: "#3D5C3A", heroDeep: "#1F4A5C", heroBottom: "#0C2233",
+    headerTop: "#2D4A2B", headerBottom: "#0C2233"
+  },
+  "Meadow to Ocean": {
+    heroTop: "#7FA76C", heroMid: "#4A7A5C", heroDeep: "#1A6B9E", heroBottom: "#0D4A72",
+    headerTop: "#3D5C3A", headerBottom: "#1A6B9E"
+  },
+  "Soft Teal Dawn": {
+    heroTop: "#8AB89E", heroMid: "#5C9A8A", heroDeep: "#2D7A8E", heroBottom: "#0D4A72",
+    headerTop: "#5C7A5A", headerBottom: "#1A6B9E"
+  },
+  "Deep Forest Night": {
+    heroTop: "#3D5C3A", heroMid: "#2A4A2B", heroDeep: "#1A3A4A", heroBottom: "#0C2233",
+    headerTop: "#1F3A1F", headerBottom: "#0C2233"
+  }
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const heroBg = `linear-gradient(180deg, ${t.heroTop} 0%, ${t.heroMid} 28%, ${t.heroDeep} 65%, ${t.heroBottom} 100%)`;
+    const headerBg = t.headerDark
+      ? `#0C2233`
+      : `linear-gradient(180deg, ${t.headerTop} 0%, ${t.headerBottom} 100%)`;
+    document.documentElement.style.setProperty('--pf-hero-bg', heroBg);
+    document.documentElement.style.setProperty('--pf-header-bg', headerBg);
+  }, [t.heroTop, t.heroMid, t.heroDeep, t.heroBottom, t.headerTop, t.headerBottom, t.headerDark]);
+
+  const applyPreset = (name) => {
+    const p = PRESETS[name];
+    if (!p) return;
+    setTweak({ preset: name, ...p });
+  };
+
+  return (
+    <TweaksPanel>
+      <TweakSection label="Presets" />
+      <TweakSelect
+        label="Color story"
+        value={t.preset}
+        options={Object.keys(PRESETS)}
+        onChange={applyPreset}
+      />
+
+      <TweakSection label="Hero gradient" />
+      <TweakColor label="Top (greenest)"   value={t.heroTop}
+        options={['#5C7A5A','#6B8A5A','#7FA76C','#8AB89E','#3D5C3A','#A8C49A']}
+        onChange={(v) => setTweak('heroTop', v)} />
+      <TweakColor label="Upper middle"     value={t.heroMid}
+        options={['#3D5C3A','#2A4A2B','#4A7A5C','#5C9A8A','#2D5C4A','#1F4A2D']}
+        onChange={(v) => setTweak('heroMid', v)} />
+      <TweakColor label="Lower middle"     value={t.heroDeep}
+        options={['#2A6B7E','#1F4A5C','#1A6B9E','#2D7A8E','#1A3A4A','#0D4A72']}
+        onChange={(v) => setTweak('heroDeep', v)} />
+      <TweakColor label="Bottom (deepest)" value={t.heroBottom}
+        options={['#0D4A72','#0C2233','#1A6B9E','#0A1A2A','#1F3A4A','#1A3A4A']}
+        onChange={(v) => setTweak('heroBottom', v)} />
+
+      <TweakSection label="Header banner" />
+      <TweakToggle label="Use solid dark navy" value={t.headerDark}
+        onChange={(v) => setTweak('headerDark', v)} />
+      {!t.headerDark && (
+        <>
+          <TweakColor label="Header top"    value={t.headerTop}
+            options={['#3D5C3A','#5C7A5A','#2D4A2B','#1F3A1F','#4A6B3A','#6B8A5A']}
+            onChange={(v) => setTweak('headerTop', v)} />
+          <TweakColor label="Header bottom" value={t.headerBottom}
+            options={['#2A4A52','#0C2233','#1A6B9E','#0D4A72','#1F4A5C','#1A3A4A']}
+            onChange={(v) => setTweak('headerBottom', v)} />
+        </>
+      )}
+    </TweaksPanel>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<App />);
+</script>
+
+</body>
+</html>
