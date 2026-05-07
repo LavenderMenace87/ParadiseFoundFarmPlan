@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urban Drop Model — Paradise Found Farm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #1a1410;
+  --bg-soft:   #221b16;
+  --bg-card:   #251d18;
+  --ink:       #f5efe3;
+  --ink-mid:   rgba(245,239,227,0.72);
+  --ink-low:   rgba(245,239,227,0.45);
+  --ink-faint: rgba(245,239,227,0.22);
+  --terra:     #c2703a;
+  --terra-dk:  #9a5328;
+  --terra-lt:  #d99464;
+  --sand:      #e8d5b0;
+  --sage:      #6b8c6b;
+  --gold:      #c9962a;
+  --rule:      rgba(245,239,227,0.10);
+  --rule-soft: rgba(245,239,227,0.05);
+  --accent:    var(--terra);
+  --accent-dk: var(--terra-dk);
+  --accent-lt: var(--terra-lt);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-weight: 400;
+  line-height: 1.55;
+  font-size: 14px;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* GRAIN OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, h4 { font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -0.01em; }
+.italic-display { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; }
+.mono { font-family: 'DM Mono', ui-monospace, monospace; }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+/* SCROLL FADE-IN */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.08s; }
+.reveal.d2 { transition-delay: 0.16s; }
+.reveal.d3 { transition-delay: 0.24s; }
+.reveal.d4 { transition-delay: 0.32s; }
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(26,20,16,0.85);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+.brand-mark {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+.brand-text {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+.brand-text small {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  font-weight: 400;
+  margin-top: 1px;
+}
+.topbar-nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.topbar-nav a {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.18s;
+}
+.topbar-nav a:hover { color: var(--accent-lt); background: rgba(255,255,255,0.04); }
+.back-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 7px 14px;
+  border-radius: 4px;
+  transition: all 0.18s;
+}
+.back-cta:hover { background: var(--accent); color: var(--bg); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 80px 32px 100px;
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+}
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  margin-bottom: 28px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+}
+.hero h1 {
+  font-size: clamp(38px, 5.5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin-bottom: 22px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.hero h1 .accent { color: var(--accent); }
+.hero h1 .italic-display { color: var(--sand); display: block; font-size: 0.78em; margin-top: 4px; }
+.hero-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+.hero-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 32px;
+  border-top: 1px solid var(--rule);
+  padding-top: 26px;
+}
+.meta-cell .meta-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 4px;
+}
+.meta-cell .meta-val {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+/* ── ROUTE MAP ── */
+.route-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.9;
+  max-width: 540px;
+  justify-self: end;
+}
+.route-map svg { width: 100%; height: 100%; display: block; }
+.az-outline {
+  fill: rgba(245,239,227,0.025);
+  stroke: var(--ink-faint);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.route-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  stroke-linecap: round;
+  animation: routeFlow 18s linear infinite;
+}
+@keyframes routeFlow { to { stroke-dashoffset: -100; } }
+.route-line-static { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: 0.3; }
+.node-dot { fill: var(--accent); }
+.node-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0.4;
+  transform-origin: center;
+  animation: pulse 3s ease-in-out infinite;
+}
+.node-ring-2 { animation-delay: 1s; }
+.node-ring-3 { animation-delay: 2s; }
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.6); opacity: 0; }
+}
+.node-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  fill: var(--ink-mid);
+  font-weight: 500;
+}
+.node-label.farm { fill: var(--accent); font-weight: 500; }
+.node-coord {
+  font-family: 'DM Mono', monospace;
+  font-size: 7.5px;
+  fill: var(--ink-low);
+  letter-spacing: 0.08em;
+}
+.compass {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  fill: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+.map-frame {
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 0.5;
+}
+.map-corner-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  fill: var(--ink-low);
+}
+
+/* ── SECTION SCAFFOLDING ── */
+section.s {
+  padding: 90px 32px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.s-inner { max-width: 1280px; margin: 0 auto; }
+.s-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.s-eyebrow .num {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 9.5px;
+}
+.s-title {
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  margin-bottom: 20px;
+  max-width: 760px;
+  color: var(--ink);
+}
+.s-lede {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--ink-mid);
+  max-width: 640px;
+  margin-bottom: 48px;
+}
+
+/* ── SECTION DIVIDER (route motif) ── */
+.divider-route {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--rule);
+}
+.divider-route svg { width: 100%; max-width: 920px; height: 18px; }
+.divider-route .dline {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  fill: none;
+  opacity: 0.4;
+}
+.divider-route .ddot { fill: var(--accent); }
+
+/* ── HOW IT WORKS — flow ── */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) ;
+  gap: 0;
+  position: relative;
+}
+.flow-node {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  padding: 26px 24px 28px;
+  position: relative;
+  border-right: none;
+}
+.flow-node:last-child { border-right: 1px solid var(--rule); }
+.flow-node-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.flow-node h3 {
+  font-size: 19px;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.flow-node p {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-mid);
+}
+.flow-arrow {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  background: var(--bg);
+  border-radius: 50%;
+}
+.flow-arrow::after {
+  content: '→';
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+.flow-node:last-child .flow-arrow { display: none; }
+
+.callout {
+  margin-top: 56px;
+  padding: 36px 44px;
+  background: linear-gradient(135deg, var(--bg-soft) 0%, rgba(194,112,58,0.08) 100%);
+  border: 1px solid var(--accent);
+  border-left-width: 3px;
+  border-radius: 2px;
+  position: relative;
+}
+.callout::before {
+  content: '"';
+  position: absolute;
+  top: 8px;
+  left: 18px;
+  font-family: 'Fraunces', serif;
+  font-size: 80px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.25;
+}
+.callout-text {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--ink);
+  font-style: italic;
+  letter-spacing: -0.005em;
+  position: relative;
+}
+.callout-attribution {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 18px;
+}
+
+/* ── BUNDLE GRID ── */
+.bundle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.bundle-card {
+  background: var(--bg-card);
+  padding: 30px 28px;
+  position: relative;
+  transition: background 0.25s;
+}
+.bundle-card:hover { background: var(--bg-soft); }
+.bundle-icon {
+  font-size: 32px;
+  margin-bottom: 18px;
+  display: inline-block;
+  filter: grayscale(0.2) saturate(1.1);
+}
+.bundle-name {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.bundle-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-mid);
+}
+.bundle-card .row-num {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--ink-low);
+}
+
+/* ── TIERS ── */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.tier {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  padding: 32px 30px 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.tier-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 8px;
+}
+.tier h3 {
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.tier-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 4px 9px;
+  border-radius: 2px;
+  font-weight: 500;
+  margin-bottom: 22px;
+  align-self: flex-start;
+}
+.tier ul {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+}
+.tier ul li {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.tier ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 1px;
+  background: var(--accent);
+}
+.tier-goal {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--accent-lt);
+  border-top: 1px solid var(--rule);
+  padding-top: 16px;
+  line-height: 1.5;
+}
+
+/* ── CUSTOMERS ── */
+.customers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.cust-col {
+  border-top: 2px solid var(--accent);
+  padding-top: 24px;
+}
+.cust-col h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.cust-col ul {
+  list-style: none;
+}
+.cust-col li {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.cust-col li:last-child { border-bottom: none; }
+
+/* ── PRE-SALE DISCIPLINE — split do/don't ── */
+.discipline {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--rule);
+  padding: 56px 48px;
+}
+.discipline-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 36px;
+}
+.disc-col h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.disc-col.dont h4 { color: var(--terra-lt); }
+.disc-col.do h4   { color: var(--sage); }
+.disc-col ul { list-style: none; }
+.disc-col li {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 10px 0 10px 24px;
+  position: relative;
+}
+.disc-col.dont li::before {
+  content: '×';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  color: var(--terra-lt);
+  font-size: 18px;
+  font-weight: 700;
+}
+.disc-col.do li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  color: var(--sage);
+  font-size: 14px;
+  font-weight: 700;
+}
+.eliminates {
+  border-top: 1px solid var(--rule);
+  padding-top: 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.eliminates-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+}
+.eliminates-list {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--ink);
+  font-style: italic;
+}
+.eliminates-list span {
+  color: var(--accent);
+  margin: 0 4px;
+}
+
+/* ── ECONOMICS TABLE ── */
+.econ-wrap {
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.econ-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.econ-table th, .econ-table td {
+  padding: 18px 22px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  vertical-align: middle;
+}
+.econ-table th {
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  font-weight: 500;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--rule);
+}
+.econ-table th:first-child { width: 32%; }
+.econ-table tbody tr:last-child td { border-bottom: none; }
+.econ-scenario {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.econ-scenario small {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.econ-input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font: inherit;
+  color: var(--ink);
+  padding: 4px 6px;
+  width: 70px;
+  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.15s;
+}
+.econ-input:hover { border-color: var(--rule); background: rgba(245,239,227,0.03); }
+.econ-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(194,112,58,0.06);
+  color: var(--accent-lt);
+}
+.econ-derived {
+  color: var(--accent-lt);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.econ-derived strong { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; }
+.econ-foot {
+  margin-top: 22px;
+  padding: 18px 22px;
+  background: var(--bg-soft);
+  border-left: 3px solid var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+}
+.econ-foot strong { color: var(--gold); font-weight: 500; }
+.econ-help {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.econ-help::before {
+  content: '✏';
+  color: var(--accent);
+}
+.econ-reset {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-low);
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.econ-reset:hover { color: var(--accent-lt); border-color: var(--accent); }
+
+/* ── RISKS ── */
+.risks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.risk {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  padding: 28px 30px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 24px;
+  align-items: start;
+}
+.risk-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.risk-name {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.risk-fail {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--rule);
+}
+.risk-fail-lbl, .risk-mit-lbl {
+  display: inline-block;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-right: 8px;
+  font-weight: 500;
+}
+.risk-fail-lbl { color: var(--terra-lt); }
+.risk-mit-lbl  { color: var(--sage); }
+.risk-mit {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+
+/* ── LAUNCH TIMELINE ── */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dk) 70%, transparent 100%);
+}
+.tl-item {
+  position: relative;
+  padding-bottom: 38px;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+}
+.tl-item::after {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.tl-when {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.tl-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.tl-body {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  line-height: 1.7;
+}
+.tl-body p { margin-bottom: 6px; }
+
+/* ── STRATEGIC VALUE ── */
+.strategic {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+.strat-num {
+  font-family: 'Fraunces', serif;
+  font-size: 64px;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 18px;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+.strat-col h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.strat-col p {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--ink-mid);
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 70px 32px 50px;
+  border-top: 1px solid var(--rule);
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.footer-brand-block .footer-name {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.footer-brand-block .footer-tag {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--accent-lt);
+  margin-bottom: 22px;
+}
+.footer-back {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 4px;
+  transition: color 0.15s;
+}
+.footer-back:hover { color: var(--ink); }
+.footer-col h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.footer-col p, .footer-col li {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-mid);
+  line-height: 1.7;
+}
+.footer-col ul { list-style: none; }
+.footer-meta {
+  max-width: 1280px;
+  margin: 50px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+}
+
+/* ── PALETTE TWEAK PANEL ── */
+.palette-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  color: var(--ink-mid);
+  border-radius: 100px;
+  padding: 10px 16px 10px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 60;
+  backdrop-filter: blur(12px);
+  transition: all 0.18s;
+}
+.palette-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.palette-toggle .swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid rgba(0,0,0,0.25);
+}
+.palette-popover {
+  position: fixed;
+  bottom: 70px;
+  right: 22px;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px;
+  z-index: 60;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  min-width: 220px;
+  display: none;
+}
+.palette-popover.open { display: block; }
+.palette-popover h5 {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.palette-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background 0.15s;
+}
+.palette-option:hover { background: var(--bg-soft); }
+.palette-option.active { background: var(--bg-soft); border-left: 2px solid var(--ink); }
+.palette-swatches { display: flex; gap: 4px; }
+.palette-swatches span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.3);
+}
+.palette-name {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.palette-name small {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  margin-top: 1px;
+  font-weight: 400;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 980px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .route-map { justify-self: center; }
+  .flow { grid-template-columns: 1fr 1fr; }
+  .flow-node:nth-child(2) .flow-arrow { display: none; }
+  .bundle-grid, .tiers, .customers, .strategic, .risks { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .footer-brand-block { grid-column: 1 / -1; }
+}
+@media (max-width: 680px) {
+  .topbar-inner { padding: 12px 18px; flex-wrap: wrap; }
+  .topbar-nav { width: 100%; justify-content: flex-start; gap: 0; }
+  .hero { padding: 56px 22px 70px; }
+  section.s { padding: 64px 22px; }
+  .flow, .bundle-grid, .tiers, .customers, .strategic, .risks { grid-template-columns: 1fr; }
+  .flow-node { border-right: 1px solid var(--rule); }
+  .flow-arrow { display: none !important; }
+  .discipline { padding: 36px 24px; }
+  .discipline-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-meta { flex-direction: column; gap: 8px; }
+  .econ-table th, .econ-table td { padding: 12px 12px; font-size: 11.5px; }
+  .econ-input { width: 56px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ TOP BAR ════════ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="topbar-brand" href="index.html">
+      <span class="brand-mark">P</span>
+      <span class="brand-text">Paradise Found Farm<small>Hereford · AZ</small></span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html">Plan</a>
+      <a href="experience.html">Experience</a>
+      <a href="tracker.html">Tracker</a>
+    </nav>
+    <a href="index.html" class="back-cta">← Back to Plan</a>
+  </div>
+</header>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="reveal in">
+      <div class="hero-eyebrow">Urban Drop Model · Hereford, AZ</div>
+      <h1>
+        Rural Production.<br>
+        <span class="accent">Urban Access.</span><br>
+        <span class="italic-display">Pre-sold every time.</span>
+      </h1>
+      <p class="hero-sub">A mobile supply chain for people building the homesteading life — without the drive.</p>
+      <div class="hero-meta">
+        <div class="meta-cell">
+          <div class="meta-lbl">Production</div>
+          <div class="meta-val">Hereford, AZ</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-lbl">Drop Markets</div>
+          <div class="meta-val">Tucson · Sierra Vista · Bisbee</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-lbl">Model</div>
+          <div class="meta-val">Pre-order → Pack → Deliver</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-lbl">SKU Categories</div>
+          <div class="meta-val">Livestock · Plants · Soil · Supplies</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="route-map reveal in d1">
+      <svg viewBox="0 0 540 480" xmlns="http://www.w3.org/2000/svg">
+        <!-- Map frame + corner labels -->
+        <rect class="map-frame" x="6" y="6" width="528" height="468"/>
+        <text class="map-corner-text" x="14" y="22">Southern Arizona</text>
+        <text class="map-corner-text" x="526" y="22" text-anchor="end">Drop Routes · v1</text>
+        <text class="map-corner-text" x="14" y="466">Scale ~ 1:1.4M</text>
+        <text class="map-corner-text" x="526" y="466" text-anchor="end">N ↑</text>
+
+        <!-- Compass tick marks -->
+        <g opacity="0.35">
+          <line x1="270" y1="30" x2="270" y2="38" stroke="rgba(245,239,227,0.4)" stroke-width="0.5"/>
+          <line x1="270" y1="442" x2="270" y2="450" stroke="rgba(245,239,227,0.4)" stroke-width="0.5"/>
+        </g>
+
+        <!-- Approximate AZ-southern-corner outline -->
+        <path class="az-outline" d="
+          M 60 90
+          L 480 90
+          L 480 200
+          L 470 320
+          L 440 410
+          L 380 432
+          L 280 442
+          L 180 432
+          L 100 410
+          L 70 340
+          L 60 200
+          Z
+        "/>
+
+        <!-- Topographic hint lines -->
+        <g opacity="0.18" stroke="rgba(245,239,227,0.5)" stroke-width="0.4" fill="none">
+          <path d="M 130 280 Q 220 240 310 270 Q 390 295 460 260"/>
+          <path d="M 110 320 Q 230 290 320 305 Q 400 320 470 295"/>
+          <path d="M 150 360 Q 250 340 340 350 Q 410 358 460 340"/>
+        </g>
+
+        <!-- Route lines from Hereford -->
+        <!-- Hereford: south-central; Tucson: northwest; Sierra Vista: north-near; Bisbee: east -->
+        <path class="route-line-static" d="M 280 360 Q 230 300 175 220"/>
+        <path class="route-line-static" d="M 280 360 L 280 280"/>
+        <path class="route-line-static" d="M 280 360 Q 320 340 380 330"/>
+
+        <path class="route-line" d="M 280 360 Q 230 300 175 220"/>
+        <path class="route-line" d="M 280 360 L 280 280"/>
+        <path class="route-line" d="M 280 360 Q 320 340 380 330"/>
+
+        <!-- Tucson NW -->
+        <g>
+          <circle class="node-ring node-ring-2" cx="175" cy="220" r="6"/>
+          <circle class="node-dot" cx="175" cy="220" r="4.5"/>
+          <text class="node-label" x="175" y="206" text-anchor="middle">Tucson</text>
+          <text class="node-coord" x="175" y="240" text-anchor="middle">~75 mi · NW</text>
+        </g>
+
+        <!-- Sierra Vista N -->
+        <g>
+          <circle class="node-ring node-ring-3" cx="280" cy="280" r="6"/>
+          <circle class="node-dot" cx="280" cy="280" r="4.5"/>
+          <text class="node-label" x="280" y="266" text-anchor="middle">Sierra Vista</text>
+          <text class="node-coord" x="280" y="298" text-anchor="middle">~12 mi · N</text>
+        </g>
+
+        <!-- Bisbee E -->
+        <g>
+          <circle class="node-ring" cx="380" cy="330" r="6"/>
+          <circle class="node-dot" cx="380" cy="330" r="4.5"/>
+          <text class="node-label" x="380" y="316" text-anchor="middle">Bisbee</text>
+          <text class="node-coord" x="380" y="348" text-anchor="middle">~24 mi · E</text>
+        </g>
+
+        <!-- Hereford / Farm origin -->
+        <g>
+          <circle cx="280" cy="360" r="14" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.5"/>
+          <circle cx="280" cy="360" r="8" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          <circle cx="280" cy="360" r="3.5" fill="var(--accent)"/>
+          <text class="node-label farm" x="280" y="392" text-anchor="middle">Paradise Found Farm</text>
+          <text class="node-coord" x="280" y="406" text-anchor="middle">31.45° N · 110.10° W</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- divider -->
+<div class="divider-route">
+  <svg viewBox="0 0 920 18" preserveAspectRatio="none">
+    <path class="dline" d="M 20 9 L 900 9"/>
+    <circle class="ddot" cx="20" cy="9" r="3"/>
+    <circle class="ddot" cx="313" cy="9" r="3"/>
+    <circle class="ddot" cx="606" cy="9" r="3"/>
+    <circle class="ddot" cx="900" cy="9" r="3"/>
+  </svg>
+</div>
+
+<!-- ════════ 2. HOW IT WORKS ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">02</span> The core mechanic</div>
+    <h2 class="s-title reveal">How it works</h2>
+    <p class="s-lede reveal d1">A four-stage flow, run on the same calendar week after week. Predictable enough to memorize, tight enough to scale.</p>
+
+    <div class="flow reveal d2">
+      <div class="flow-node">
+        <div class="flow-node-num">01 / Pre-order</div>
+        <h3>Customer Pre-Orders</h3>
+        <p>Orders close 48 hours before drop. No walk-ups. No impulse buys. Every unit is already sold.</p>
+        <div class="flow-arrow"></div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-num">02 / Prepare</div>
+        <h3>Farm Prepares</h3>
+        <p>Harvest, pull, pack, stage. Only what's been paid for leaves the farm.</p>
+        <div class="flow-arrow"></div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-num">03 / Load</div>
+        <h3>Packed &amp; Loaded</h3>
+        <p>Vehicle loaded with confirmed orders. No surplus, no waste, no guesswork.</p>
+        <div class="flow-arrow"></div>
+      </div>
+      <div class="flow-node">
+        <div class="flow-node-num">04 / Drop</div>
+        <h3>Urban Pickup Node</h3>
+        <p>Fixed location, fixed day, fixed time. Same every week. Customer shows up, picks up, done.</p>
+      </div>
+    </div>
+
+    <div class="callout reveal d3">
+      <div class="callout-text">Customers don't browse. They pre-order and show up. That's what makes this scalable.</div>
+      <div class="callout-attribution">— The whole model in one sentence</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 3. BUNDLE ECOSYSTEM ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">03</span> Structural advantage</div>
+    <h2 class="s-title reveal">The bundle ecosystem</h2>
+    <p class="s-lede reveal d1">Most farms have one or two SKUs. Paradise Found has six interlocking product lines — which is what this model needs to work at scale.</p>
+
+    <div class="bundle-grid reveal d2">
+      <div class="bundle-card">
+        <span class="row-num">01 / 06</span>
+        <span class="bundle-icon">🐔</span>
+        <div class="bundle-name">Chickens</div>
+        <p class="bundle-desc">Laying hens, starter flocks, desert-adapted bloodlines.</p>
+      </div>
+      <div class="bundle-card">
+        <span class="row-num">02 / 06</span>
+        <span class="bundle-icon">🐇</span>
+        <div class="bundle-name">Rabbits</div>
+        <p class="bundle-desc">Breeding stock, pet-quality animals, meat breeds.</p>
+      </div>
+      <div class="bundle-card">
+        <span class="row-num">03 / 06</span>
+        <span class="bundle-icon">🐐</span>
+        <div class="bundle-name">Goats</div>
+        <p class="bundle-desc">Livestock sales, goat milk, handmade soaps.</p>
+      </div>
+      <div class="bundle-card">
+        <span class="row-num">04 / 06</span>
+        <span class="bundle-icon">🦤</span>
+        <div class="bundle-name">Emus</div>
+        <p class="bundle-desc">High novelty, premium oil, egg curiosity products.</p>
+      </div>
+      <div class="bundle-card">
+        <span class="row-num">05 / 06</span>
+        <span class="bundle-icon">🌿</span>
+        <div class="bundle-name">Nursery + Orchard</div>
+        <p class="bundle-desc">Starts, bare-root trees, seasonal plants.</p>
+      </div>
+      <div class="bundle-card">
+        <span class="row-num">06 / 06</span>
+        <span class="bundle-icon">🎪</span>
+        <div class="bundle-name">Mobile Petting Zoo</div>
+        <p class="bundle-desc">Experience layer, event add-on, community touchpoint.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 4. THREE TIERS ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">04</span> Drop structure</div>
+    <h2 class="s-title reveal">Three tiers, one system</h2>
+    <p class="s-lede reveal d1">A predictable cash-flow base, a high-margin novelty layer, and a brand-building event channel — running off the same vehicle and the same operations.</p>
+
+    <div class="tiers">
+      <div class="tier reveal d1">
+        <div class="tier-num">Tier 01</div>
+        <h3>Weekly Core Drop</h3>
+        <span class="tier-badge">Cash Flow Engine</span>
+        <ul>
+          <li>1–2 fixed urban locations</li>
+          <li>Same time, same day, every week</li>
+          <li>Orders close 48 hours before</li>
+          <li>Livestock starters, rabbits, plants, soil, soaps</li>
+        </ul>
+        <div class="tier-goal">Recurring, predictable revenue baseline.</div>
+      </div>
+
+      <div class="tier reveal d2">
+        <div class="tier-num">Tier 02</div>
+        <h3>Premium &amp; Novelty</h3>
+        <span class="tier-badge">High Margin</span>
+        <ul>
+          <li>Emu products — oil, feathers, novelty</li>
+          <li>Pre-booked baby-animal interaction tickets</li>
+          <li>"Meet the animals" add-on at drop site</li>
+          <li>Starter consultation bundles ($25–$75)</li>
+        </ul>
+        <div class="tier-goal">Increase average order value per customer.</div>
+      </div>
+
+      <div class="tier reveal d3">
+        <div class="tier-num">Tier 03</div>
+        <h3>Event-Based Drop</h3>
+        <span class="tier-badge">Brand Building</span>
+        <ul>
+          <li>Mobile petting zoo at partner venues</li>
+          <li>Breweries, yoga studios, schools, markets</li>
+          <li>Pickup + experience + marketing funnel</li>
+          <li>Press- and word-of-mouth surface area</li>
+        </ul>
+        <div class="tier-goal">New customer acquisition + community presence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 5. CUSTOMERS ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">05</span> Demand profile</div>
+    <h2 class="s-title reveal">Who we're selling to</h2>
+    <p class="s-lede reveal d1">Three distinct buyer types — each with a different reason to show up, but all converging on the same urban drop point.</p>
+
+    <div class="customers">
+      <div class="cust-col reveal d1">
+        <h3>Aspiring Homesteaders</h3>
+        <ul>
+          <li>Want chickens but don't know where to start</li>
+          <li>Interested in rabbits but haven't pulled the trigger</li>
+          <li>Want a "farm connection" without relocating</li>
+          <li>High curiosity, high LTV once trust is built</li>
+        </ul>
+      </div>
+      <div class="cust-col reveal d2">
+        <h3>Existing Hobby Homesteaders</h3>
+        <ul>
+          <li>Need new bloodlines — rabbits, chickens</li>
+          <li>Looking for desert-adapted genetics</li>
+          <li>Want reliable compost &amp; soil inputs</li>
+          <li>Already spending — need a better local source</li>
+        </ul>
+      </div>
+      <div class="cust-col reveal d3">
+        <h3>Experience-Driven Buyers</h3>
+        <ul>
+          <li>Parents buying animals as pets</li>
+          <li>People who buy the story, not just the product</li>
+          <li>Less price-sensitive</li>
+          <li>Strong word-of-mouth multiplier — they talk</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 6. PRE-SALE DISCIPLINE ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">06</span> Operating discipline</div>
+    <h2 class="s-title reveal">Non-negotiable: pre-sale only.</h2>
+    <p class="s-lede reveal d1">If this rule slips, the model breaks. The whole structure runs on certainty before pack-out.</p>
+
+    <div class="discipline reveal d2">
+      <div class="discipline-grid">
+        <div class="disc-col dont">
+          <h4>Do Not</h4>
+          <ul>
+            <li>Bring random inventory and hope it sells</li>
+            <li>Adjust pricing at the pickup window</li>
+            <li>Accept walk-up purchases</li>
+            <li>Offer "whatever's left over"</li>
+          </ul>
+        </div>
+        <div class="disc-col do">
+          <h4>Do</h4>
+          <ul>
+            <li>Sell first → harvest → deliver</li>
+            <li>Close orders 48 hours before every drop</li>
+            <li>Require prepayment — no exceptions</li>
+            <li>Keep SKUs tight early (5–8 items max)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="eliminates">
+        <span class="eliminates-lbl">What this eliminates</span>
+        <span class="eliminates-list">waste<span>·</span>guesswork<span>·</span>cash flow gaps<span>·</span>inconsistent experience</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 7. ECONOMICS ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">07</span> Simple economics</div>
+    <h2 class="s-title reveal">What the numbers look like</h2>
+    <p class="s-lede reveal d1">Edit any cell to model your own assumptions — totals recalculate live. Conservative defaults below.</p>
+
+    <div class="econ-help reveal d2">
+      <span>Click any value to edit · Tab between fields</span>
+      <button class="econ-reset" onclick="resetEcon()">↻ Reset defaults</button>
+    </div>
+
+    <div class="econ-wrap reveal d2">
+      <table class="econ-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Customers / Drop</th>
+            <th>Avg Order ($)</th>
+            <th>Weekly Revenue</th>
+            <th>Monthly Est.</th>
+          </tr>
+        </thead>
+        <tbody id="econ-rows">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="econ-foot reveal d3">
+      <strong>Note —</strong> these numbers are before layering in subscription egg shares, premium bundles, or event-based drops. <em>Consistency compounds faster than scale.</em>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 8. RISKS ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">08</span> Failure modes</div>
+    <h2 class="s-title reveal">What kills this — and how we don't let it.</h2>
+    <p class="s-lede reveal d1">Four real ways this model breaks. Each has a known mitigation. None of these are theoretical.</p>
+
+    <div class="risks">
+      <div class="risk reveal d1">
+        <div class="risk-num">01</div>
+        <div>
+          <div class="risk-name">Inconsistency</div>
+          <div class="risk-fail"><span class="risk-fail-lbl">Failure</span>Skip one week, customers disappear.</div>
+          <div class="risk-mit"><span class="risk-mit-lbl">Mitigation</span>Start with one drop per week. Don't scale until 6–8 stable weeks are in the bag.</div>
+        </div>
+      </div>
+      <div class="risk reveal d2">
+        <div class="risk-num">02</div>
+        <div>
+          <div class="risk-name">Overcomplication</div>
+          <div class="risk-fail"><span class="risk-fail-lbl">Failure</span>Too many SKUs too early overwhelms operations and customers.</div>
+          <div class="risk-mit"><span class="risk-mit-lbl">Mitigation</span>Cap at 5–8 items for the first two months. Add complexity only against demand signal.</div>
+        </div>
+      </div>
+      <div class="risk reveal d3">
+        <div class="risk-num">03</div>
+        <div>
+          <div class="risk-name">No-Show Buyers</div>
+          <div class="risk-fail"><span class="risk-fail-lbl">Failure</span>Showing up with animals nobody picks up is a welfare and cost problem.</div>
+          <div class="risk-mit"><span class="risk-mit-lbl">Mitigation</span>Prepayment required, no exceptions. No prepay, no reservation.</div>
+        </div>
+      </div>
+      <div class="risk reveal d4">
+        <div class="risk-num">04</div>
+        <div>
+          <div class="risk-name">Animal Transport Stress</div>
+          <div class="risk-fail"><span class="risk-fail-lbl">Failure</span>Heat, handling, and distance are real factors in southern Arizona.</div>
+          <div class="risk-mit"><span class="risk-mit-lbl">Mitigation</span>Proper containment, shade, water. Short handling windows. Pre-load staging.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 9. LAUNCH ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">09</span> High-ROI start plan</div>
+    <h2 class="s-title reveal">How we launch</h2>
+    <p class="s-lede reveal d1">Validate before pack-out. Pre-sell before harvest. Stay small until the calendar is consistent.</p>
+
+    <div class="timeline">
+      <div class="tl-item reveal d1">
+        <div class="tl-when">Week 1–2 · Validate Interest</div>
+        <div class="tl-title">Prove demand before building anything</div>
+        <div class="tl-body">
+          <p>Simple landing page or Google Form: <em>"Tucson Farm Drop — Interest List."</em></p>
+          <p>Share in Tucson homesteading groups, Facebook, NextDoor.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal d2">
+        <div class="tl-when">Week 3–4 · Pre-Sell First Drop</div>
+        <div class="tl-title">Real money, small menu</div>
+        <div class="tl-body">
+          <p>First-drop menu: laying hens + 1 rabbit listing + 1 mixed nursery box.</p>
+          <p>5–8 SKUs maximum. Prepayment required to reserve.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal d3">
+        <div class="tl-when">Month 2 · Run 2–4 Drops</div>
+        <div class="tl-title">Document what's pulling weight</div>
+        <div class="tl-body">
+          <p>Track demand patterns and best sellers.</p>
+          <p>Note which SKUs generate the most questions — those become the next consulting upsell.</p>
+        </div>
+      </div>
+
+      <div class="tl-item reveal d4">
+        <div class="tl-when">Month 3+ · Expand Carefully</div>
+        <div class="tl-title">Layer in margin and recurrence</div>
+        <div class="tl-body">
+          <p>Add nursery items and soil products.</p>
+          <p>Introduce event-based drops.</p>
+          <p>Begin a subscription egg share for predictable recurring revenue.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 10. STRATEGIC VALUE ════════ -->
+<section class="s">
+  <div class="s-inner">
+    <div class="s-eyebrow reveal"><span class="num">10</span> Strategic value</div>
+    <h2 class="s-title reveal">Why this matters beyond the revenue</h2>
+    <p class="s-lede reveal d1">Three structural payoffs that show up regardless of how aggressively we scale the drops themselves.</p>
+
+    <div class="strategic">
+      <div class="strat-col reveal d1">
+        <div class="strat-num">01</div>
+        <h3>Immediate cash flow</h3>
+        <p>Not dependent on visitors driving to the farm. Revenue can start in week three of operating.</p>
+      </div>
+      <div class="strat-col reveal d2">
+        <div class="strat-num">02</div>
+        <h3>Customer pipeline</h3>
+        <p>Urban drop customers become farm visitors. Farm visitors become agritourism revenue, event attendees, and retreat guests.</p>
+      </div>
+      <div class="strat-col reveal d3">
+        <div class="strat-num">03</div>
+        <h3>Portable business model</h3>
+        <p>Fully transferable to any future land operation. We're building brand, systems, and customer relationships — none of which are tied to this specific property.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand-block">
+      <div class="footer-name">Paradise Found Farm</div>
+      <div class="footer-tag">Bring the farm to them — on your terms.</div>
+      <a href="index.html" class="footer-back">← Back to main plan</a>
+    </div>
+    <div class="footer-col">
+      <h4>Location</h4>
+      <p>Hereford, Arizona<br>Cochise County · 85615</p>
+    </div>
+    <div class="footer-col">
+      <h4>Markets</h4>
+      <ul>
+        <li>Tucson</li>
+        <li>Sierra Vista</li>
+        <li>Bisbee</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Urban Drop Model · v1</span>
+    <span>ParadiseFound.Farm</span>
+  </div>
+</footer>
+
+<!-- ════════ PALETTE TOGGLE ════════ -->
+<button class="palette-toggle" id="palette-toggle" aria-label="Switch palette">
+  <span class="swatch" id="palette-swatch"></span>
+  Palette
+</button>
+<div class="palette-popover" id="palette-popover">
+  <h5>Color treatment</h5>
+  <div class="palette-option active" data-palette="terra">
+    <div class="palette-swatches">
+      <span style="background:#c2703a"></span>
+      <span style="background:#e8d5b0"></span>
+      <span style="background:#c9962a"></span>
+    </div>
+    <div class="palette-name">Terracotta<small>Default · earth-forward</small></div>
+  </div>
+  <div class="palette-option" data-palette="sage">
+    <div class="palette-swatches">
+      <span style="background:#6b8c6b"></span>
+      <span style="background:#e8d5b0"></span>
+      <span style="background:#c9962a"></span>
+    </div>
+    <div class="palette-name">Sage<small>Cooler · plant-forward</small></div>
+  </div>
+</div>
+
+<script>
+// ── Reveal on scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { rootMargin: '-50px 0px -10% 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── Editable economics
+const ECON_DEFAULTS = [
+  { id: 's1', label: 'Conservative start', sub: 'Weeks 1–4',          cust: 25, avg: 60 },
+  { id: 's2', label: 'Stable',              sub: 'Month 3+',           cust: 50, avg: 75 },
+  { id: 's3', label: 'Subs + events',       sub: 'Compounding',        cust: 80, avg: 90 },
+];
+const ECON_KEY = 'paradiseUrbanDrop.econ.v1';
+
+function loadEcon() {
+  try {
+    const raw = localStorage.getItem(ECON_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length === ECON_DEFAULTS.length) return parsed;
+    }
+  } catch(e) {}
+  return ECON_DEFAULTS.map(s => ({...s}));
+}
+function saveEcon(rows) { try { localStorage.setItem(ECON_KEY, JSON.stringify(rows)); } catch(e) {} }
+
+let econ = loadEcon();
+
+function fmt(n) {
+  if (!isFinite(n)) return '—';
+  return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
+function renderEcon() {
+  const tbody = document.getElementById('econ-rows');
+  tbody.innerHTML = econ.map((row, i) => {
+    const weekly = (row.cust || 0) * (row.avg || 0);
+    const monthly = weekly * 4;
+    return `
+      <tr>
+        <td><div class="econ-scenario">${row.label}<small>${row.sub}</small></div></td>
+        <td><input class="econ-input" type="number" min="0" step="1" data-row="${i}" data-field="cust" value="${row.cust}" aria-label="Customers per drop, ${row.label}"></td>
+        <td><input class="econ-input" type="number" min="0" step="5" data-row="${i}" data-field="avg" value="${row.avg}" aria-label="Average order, ${row.label}"></td>
+        <td class="econ-derived" data-derived="weekly-${i}"><strong>${fmt(weekly)}</strong></td>
+        <td class="econ-derived" data-derived="monthly-${i}"><strong>${fmt(monthly)}</strong></td>
+      </tr>
+    `;
+  }).join('');
+
+  tbody.querySelectorAll('.econ-input').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const i = +e.target.dataset.row;
+      const f = e.target.dataset.field;
+      const v = parseFloat(e.target.value) || 0;
+      econ[i][f] = v;
+      const w = (econ[i].cust || 0) * (econ[i].avg || 0);
+      tbody.querySelector(`[data-derived="weekly-${i}"]`).innerHTML  = '<strong>' + fmt(w) + '</strong>';
+      tbody.querySelector(`[data-derived="monthly-${i}"]`).innerHTML = '<strong>' + fmt(w * 4) + '</strong>';
+      saveEcon(econ);
+    });
+  });
+}
+function resetEcon() {
+  econ = ECON_DEFAULTS.map(s => ({...s}));
+  saveEcon(econ);
+  renderEcon();
+}
+renderEcon();
+
+// ── Palette switcher
+const PALETTES = {
+  terra: { '--accent': '#c2703a', '--accent-dk': '#9a5328', '--accent-lt': '#d99464' },
+  sage:  { '--accent': '#6b8c6b', '--accent-dk': '#4f6b4f', '--accent-lt': '#94b594' },
+};
+const PAL_KEY = 'paradiseUrbanDrop.palette.v1';
+function applyPalette(name) {
+  const p = PALETTES[name] || PALETTES.terra;
+  Object.entries(p).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+  document.querySelectorAll('.palette-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.palette === name);
+  });
+  document.getElementById('palette-swatch').style.background = p['--accent'];
+  try { localStorage.setItem(PAL_KEY, name); } catch(e) {}
+}
+applyPalette(localStorage.getItem(PAL_KEY) || 'terra');
+
+document.querySelectorAll('.palette-option').forEach(el => {
+  el.addEventListener('click', () => applyPalette(el.dataset.palette));
+});
+const toggle = document.getElementById('palette-toggle');
+const pop = document.getElementById('palette-popover');
+toggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  pop.classList.toggle('open');
+});
+document.addEventListener('click', (e) => {
+  if (!pop.contains(e.target) && e.target !== toggle) pop.classList.remove('open');
+});
+</script>
+
+</body>
+</html>
